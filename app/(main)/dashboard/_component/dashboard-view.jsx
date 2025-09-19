@@ -70,7 +70,7 @@ const DashboardView = ({ insights }) => {
   const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
   const nextUpdateDistance = formatDistanceToNow(
     new Date(insights.nextUpdate),
-    { addSuffix: true }
+    { addSuffix: true },
   );
 
   return (
@@ -120,7 +120,7 @@ const DashboardView = ({ insights }) => {
             <div className="text-2xl font-bold">{insights.demandLevel}</div>
             <div
               className={`h-2 w-full rounded-full mt-2 ${getDemandLevelColor(
-                insights.demandLevel
+                insights.demandLevel,
               )}`}
             />
           </CardContent>

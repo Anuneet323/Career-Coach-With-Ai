@@ -58,7 +58,7 @@ export default function QuizList({ assessments }) {
                     <div>
                       {format(
                         new Date(assessment.createdAt),
-                        "MMMM dd, yyyy HH:mm"
+                        "MMMM dd, yyyy HH:mm",
                       )}
                     </div>
                   </CardDescription>

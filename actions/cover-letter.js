@@ -38,7 +38,7 @@ export async function generateCoverLetter(data) {
     4. Keep it concise (max 400 words)
     5. Use proper business letter formatting in markdown
     6. Include specific examples of achievements
-    7. Relate candidate's background to job requirements
+    7. Relate candidate background to job requirements
     
     Format the letter in markdown.
   `;

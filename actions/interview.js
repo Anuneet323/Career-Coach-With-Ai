@@ -96,7 +96,7 @@ export async function saveQuizResult(questions, answers, score) {
       Based on these mistakes, provide a concise, specific improvement tip.
       Focus on the knowledge gaps revealed by these wrong answers.
       Keep the response under 2 sentences and make it encouraging.
-      Don't explicitly mention the mistakes, instead focus on what to learn/practice.
+      Don&apos;t explicitly mention the mistakes, instead focus on what to learn/practice.
     `;
 
     try {
