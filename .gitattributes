@@ -1,7 +1,1 @@
-# Force GitHub Linguist to better reflect technologies used
-*.js linguist-language=React
-*.jsx linguist-language=React
-*.ts linguist-language=TypeScript
-*.tsx linguist-language=TypeScript
-*.css linguist-language=TailwindCSS
-*.prisma linguist-language=Prisma
+Deleted .gitattributes (preparing to re-add clean version)
