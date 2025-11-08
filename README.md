@@ -1,11 +1,13 @@
 # 🧠 Career Coach with AI – Smart Career Guidance Platform
 
-## 🧠 Built With
-- ⚛️ React.js + Next.js  
-- 🎨 Tailwind CSS + Shadcn UI  
-- 🧩 Prisma + Neon Database  
-- ⚙️ Inngest for background jobs  
-- 🚀 Deployed on Vercel
+![React](https://img.shields.io/badge/Frontend-React.js-61DAFB?logo=react&logoColor=white)
+![Next.js](https://img.shields.io/badge/Framework-Next.js-black?logo=next.js)
+![TailwindCSS](https://img.shields.io/badge/UI-TailwindCSS-38B2AC?logo=tailwind-css&logoColor=white)
+![ShadcnUI](https://img.shields.io/badge/Components-Shadcn_UI-18181B?logo=shadcnui)
+![Prisma](https://img.shields.io/badge/ORM-Prisma-2D3748?logo=prisma&logoColor=white)
+![NeonDB](https://img.shields.io/badge/Database-NeonDB-00E599?logo=postgresql&logoColor=white)
+![Inngest](https://img.shields.io/badge/Jobs-Inngest-4C51BF?logo=serverless)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)
 
 An intelligent, full-stack **AI-powered career guidance web app** built with **React.js, Next.js, Prisma, and NeonDB**, styled beautifully using **Tailwind CSS** and **Shadcn UI**.  
 This app acts as your **personal AI career mentor**, offering smart recommendations, career analysis, and growth insights in a conversational, user-friendly interface.
