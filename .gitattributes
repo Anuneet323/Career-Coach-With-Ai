@@ -1,4 +1,4 @@
-# Force GitHub Linguist to better reflect technologies used
+# Tell GitHub Linguist what languages are used
 *.js linguist-language=React
 *.jsx linguist-language=React
 *.ts linguist-language=TypeScript
@@ -6,7 +6,7 @@
 *.css linguist-language=TailwindCSS
 *.prisma linguist-language=Prisma
 
-# Ignore vendor and build files
+# Ignore vendor and build directories
 node_modules/* linguist-vendored
 .next/* linguist-vendored
 dist/* linguist-vendored
