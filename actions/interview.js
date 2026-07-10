@@ -2,10 +2,9 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getGeminiModel, generateContentWithRetry, getFallbackQuiz } from "@/lib/gemini";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = getGeminiModel();
 
 export async function generateQuiz() {
   const { userId } = await auth();
@@ -25,8 +24,8 @@ export async function generateQuiz() {
     Generate 10 technical interview questions for a ${
       user.industry
     } professional${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
-  }.
+      user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
+    }.
     
     Each question should be multiple choice with 4 options.
     
@@ -44,7 +43,7 @@ export async function generateQuiz() {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(model, prompt);
     const response = result.response;
     const text = response.text();
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
@@ -52,8 +51,13 @@ export async function generateQuiz() {
 
     return quiz.questions;
   } catch (error) {
-    console.error("Error generating quiz:", error);
-    throw new Error("Failed to generate quiz questions");
+    console.warn("Gemini API rate limited/failed. Returning fallback technical quiz. Details:", error.message || error);
+    try {
+      return getFallbackQuiz(user.industry || "");
+    } catch (fallbackError) {
+      console.error("Failed to get fallback quiz:", fallbackError);
+      throw new Error("Failed to generate quiz questions");
+    }
   }
 }
 
@@ -84,7 +88,7 @@ export async function saveQuizResult(questions, answers, score) {
     const wrongQuestionsText = wrongAnswers
       .map(
         (q) =>
-          `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`
+          `Question: "${q.question}"\nCorrect Answer: "${q.answer}"\nUser Answer: "${q.userAnswer}"`,
       )
       .join("\n\n");
 
@@ -100,7 +104,7 @@ export async function saveQuizResult(questions, answers, score) {
     `;
 
     try {
-      const tipResult = await model.generateContent(improvementPrompt);
+      const tipResult = await generateContentWithRetry(model, improvementPrompt);
 
       improvementTip = tipResult.response.text().trim();
       console.log(improvementTip);

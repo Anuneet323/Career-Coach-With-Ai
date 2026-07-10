@@ -5,6 +5,8 @@ import { Toaster } from "sonner";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { dark } from "@clerk/themes";
+import CareerChatbot from "@/components/career-chatbot";
+import { shadcn } from "@clerk/ui/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,16 +17,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-      }}
-    >
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <link rel="icon" href="/logo.png" sizes="any" />
-        </head>
-        <body className={`${inter.className}`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/logo.png" sizes="any" />
+      </head>
+      <body className={`${inter.className}`}>
+        <ClerkProvider
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+          appearance={{
+            baseTheme: dark,
+            theme: shadcn,
+          }}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -32,6 +36,7 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
             <Header />
+            <CareerChatbot />
             <main className="min-h-screen">{children}</main>
             <Toaster richColors />
 
@@ -39,8 +44,8 @@ export default function RootLayout({ children }) {
               <div className="container mx-auto px-4 text-center text-gray-200"></div>
             </footer>
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

@@ -2,11 +2,10 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getGeminiModel, generateContentWithRetry } from "@/lib/gemini";
 import { revalidatePath } from "next/cache";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = getGeminiModel();
 
 export async function saveResume(content) {
   const { userId } = await auth();
@@ -44,17 +43,24 @@ export async function getResume() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
+  try {
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
 
-  if (!user) throw new Error("User not found");
+    if (!user) {
+      return null;
+    }
 
-  return await db.resume.findUnique({
-    where: {
-      userId: user.id,
-    },
-  });
+    return await db.resume.findUnique({
+      where: {
+        userId: user.id,
+      },
+    });
+  } catch (error) {
+    console.error("Error loading resume:", error);
+    return null;
+  }
 }
 
 export async function improveWithAI({ current, type }) {
@@ -87,7 +93,7 @@ export async function improveWithAI({ current, type }) {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(model, prompt);
     const response = result.response;
     const improvedContent = response.text().trim();
     return improvedContent;

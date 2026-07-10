@@ -2,10 +2,9 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getGeminiModel, generateContentWithRetry } from "@/lib/gemini";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = getGeminiModel();
 
 export async function generateCoverLetter(data) {
   const { userId } = await auth();
@@ -19,8 +18,8 @@ export async function generateCoverLetter(data) {
 
   const prompt = `
     Write a professional cover letter for a ${data.jobTitle} position at ${
-    data.companyName
-  }.
+      data.companyName
+    }.
     
     About the candidate:
     - Industry: ${user.industry}
@@ -44,7 +43,7 @@ export async function generateCoverLetter(data) {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(model, prompt);
     const content = result.response.text().trim();
 
     const coverLetter = await db.coverLetter.create({

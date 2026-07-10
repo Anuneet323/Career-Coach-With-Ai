@@ -9,31 +9,41 @@ import {
   StarsIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
 import { checkUser } from "@/lib/checkUser";
 
 export default async function Header() {
-  await checkUser();
+  const dbUser = await checkUser();
 
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="Sensai Logo"
-            width={200}
-            height={60}
-            className="h-12 py-1 w-auto object-contain"
-          />
-        </Link>
+        <div className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent hover:opacity-90 transition-opacity">
+              AiCareer
+            </span>
+          </Link>
+          {dbUser && (
+            <span className="hidden md:inline-block text-xs font-semibold text-muted-foreground border-l pl-3 py-1">
+              {dbUser.industry
+                ? `Welcome back, ${dbUser.name.split(" ")[0]}!`
+                : `Hii, ${dbUser.name.split(" ")[0]}!`}
+            </span>
+          )}
+        </div>
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 md:space-x-4">
@@ -87,9 +97,22 @@ export default async function Header() {
           </SignedIn>
 
           <SignedOut>
-            <SignInButton>
-              <Button variant="outline">Sign In</Button>
-            </SignInButton>
+            <div className="flex items-center gap-2">
+              <SignInButton
+                mode="redirect"
+                forceRedirectUrl="/dashboard"
+                fallbackRedirectUrl="/"
+              >
+                <Button variant="outline">Sign In</Button>
+              </SignInButton>
+              <SignUpButton
+                mode="redirect"
+                forceRedirectUrl="/onboarding"
+                fallbackRedirectUrl="/onboarding"
+              >
+                <Button>Sign Up</Button>
+              </SignUpButton>
+            </div>
           </SignedOut>
 
           <SignedIn>

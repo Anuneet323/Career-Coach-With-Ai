@@ -56,7 +56,7 @@ export async function updateUser(data) {
       },
       {
         timeout: 10000, // default: 5000
-      }
+      },
     );
 
     revalidatePath("/");

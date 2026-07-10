@@ -2,10 +2,13 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import {
+  getGeminiModel,
+  generateContentWithRetry,
+  getFallbackInsights,
+} from "@/lib/gemini";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = getGeminiModel();
 
 export const generateAIInsights = async (industry) => {
   const prompt = `
@@ -28,12 +31,20 @@ export const generateAIInsights = async (industry) => {
           Include at least 5 skills and trends.
         `;
 
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const text = response.text();
-  const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+  try {
+    const result = await generateContentWithRetry(model, prompt);
+    const response = result.response;
+    const text = response.text();
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
-  return JSON.parse(cleanedText);
+    return JSON.parse(cleanedText);
+  } catch (error) {
+    console.warn(
+      "Gemini API rate limited/failed. Returning fallback industry insights. Details:",
+      error.message || error,
+    );
+    return getFallbackInsights(industry);
+  }
 };
 
 export async function getIndustryInsights() {

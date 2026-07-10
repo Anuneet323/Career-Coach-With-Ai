@@ -31,22 +31,22 @@ Whether you’re a student exploring your options or a working professional plan
 ✅ **Modern UI/UX** – Built with **Shadcn UI** and **Tailwind CSS**  
 ✅ **Realtime Task Scheduling** – Managed efficiently using **Inngest**  
 ✅ **Cloud Database** – Secure and scalable data management with **NeonDB**  
-✅ **Fully Responsive** – Works beautifully on mobile, tablet, and desktop  
+✅ **Fully Responsive** – Works beautifully on mobile, tablet, and desktop
 
 ---
 
 ## 🧩 Tech Stack
 
-| Layer | Technologies |
-|--------|---------------|
-| **Frontend** | React.js, Next.js |
-| **Styling** | Tailwind CSS, Shadcn UI |
-| **Backend** | Next.js API Routes |
-| **Database** | NeonDB (PostgreSQL) |
-| **ORM** | Prisma |
-| **Background Jobs** | Inngest |
-| **AI Integration** | OpenAI / Gemini API |
-| **Deployment** | Vercel |
+| Layer               | Technologies            |
+| ------------------- | ----------------------- |
+| **Frontend**        | React.js, Next.js       |
+| **Styling**         | Tailwind CSS, Shadcn UI |
+| **Backend**         | Next.js API Routes      |
+| **Database**        | NeonDB (PostgreSQL)     |
+| **ORM**             | Prisma                  |
+| **Background Jobs** | Inngest                 |
+| **AI Integration**  | OpenAI / Gemini API     |
+| **Deployment**      | Vercel                  |
 
 ---
 
@@ -70,6 +70,7 @@ Copy code
 ## ⚙️ Getting Started
 
 1️⃣ **Clone the Repository**
+
 ```bash
 git clone https://github.com/Anuneet323/Career-Coach-With-Ai.git
 cd Career-Coach-With-Ai
@@ -84,8 +85,32 @@ Create a .env file with:
 bash
 Copy code
 DATABASE_URL="your_neondb_connection_string"
-OPENAI_API_KEY="your_openai_or_gemini_key"
+GEMINI_API_KEY="your_gemini_key"
 4️⃣ Run Prisma Migrations
+
+bash
+Copy code
+If you are using the shared Neon database, run:
+
+bash
+Copy code
+If Prisma shows P3005 on an existing database, baseline the migrations first:
+
+bash
+Copy code
+npx prisma migrate resolve --applied 20250114060115_create_models
+npx prisma migrate resolve --applied 20250114064152_update_user
+npx prisma migrate resolve --applied 20250117091806_update
+npx prisma migrate resolve --applied 20250120090020_hh
+npx prisma migrate resolve --applied 20250120124732_update
+
+Then deploy the migrations:
+
+bash
+Copy code
+npx prisma migrate deploy
+
+If you are creating a brand-new local database, you can use:
 
 bash
 Copy code
@@ -119,3 +144,4 @@ Anuneet Singh Chauhan
 🪪 License
 This project is licensed under the MIT License
 
+```
