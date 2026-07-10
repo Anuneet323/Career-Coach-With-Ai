@@ -25,5 +25,6 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
     "no-unused-vars": ["warn"],
     "react/no-unescaped-entities": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
   },
 };
